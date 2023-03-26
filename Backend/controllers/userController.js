@@ -55,7 +55,7 @@ async function getToken(req, res) {
       return res.status(401).json({ message: "Invalid email or password." });
     };
     if (!user.token) {
-      const token = jsonwebtoken.sign({ userId: user._id }, process.env.JSONWEBTOKEN_SECRET);
+      const token = jsonwebtoken.sign({ userId: user._id }, process.env.JSONWEBTOKEN_SECRET || 'asdfghjkl');
       user.token = token;
       await user.save();
       return res.status(200).json({ token: token });
