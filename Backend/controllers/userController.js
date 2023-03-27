@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
+const JSONWEBTOKENSECREYKEY = 'asdfghjk';
 
 function getUser(req, res) {
   return res.status(200).json(req.user);
@@ -17,11 +18,11 @@ async function getUsers(req, res) {
 }
 
 async function createUser(req, res) {
-  const { name, email, password } = req.body;
-  if (!(name && email && password)) {
-    return res.status(400).json({ "message": "Please provide a valid name, email, and password." })
-  };
   try {
+    const { name, email, password } = req.body;
+    if (!(name && email && password)) {
+      return res.status(400).json({ "message": "Please provide a valid name, email, and password." })
+    };
     const userExists = await User.findOne({ email: email });
     if (userExists) {
       return res.status(400).json({ message: "That email address is already registered. Please choose a different email." });
@@ -41,11 +42,11 @@ async function createUser(req, res) {
 };
 
 async function getToken(req, res) {
-  const { email, password } = req.body;
-  if (!(email && password)) {
-    return res.status(400).json({ message: "Please provide an email and password." });
-  };
   try {
+    const { email, password } = req.body;
+    if (!(email && password)) {
+      return res.status(400).json({ message: "Please provide an email and password." });
+    };
     const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(404).json({ message: "User not found." });
@@ -55,7 +56,7 @@ async function getToken(req, res) {
       return res.status(401).json({ message: "Invalid email or password." });
     };
     if (!user.token) {
-      const token = jsonwebtoken.sign({ userId: user._id }, process.env.JSONWEBTOKEN_SECRET || 'asdfghjkl');
+      const token = jsonwebtoken.sign({ userId: user._id }, JSONWEBTOKENSECREYKEY);
       user.token = token;
       await user.save();
       return res.status(200).json({ token: token });

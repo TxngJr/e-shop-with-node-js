@@ -1,11 +1,11 @@
 const jsonwebtoken = require('jsonwebtoken');
 const User = require('../models/userModel');
-
+const JSONWEBTOKENSECREYKEY = 'asdfghjk';
 
 async function checkToken(req, res, next) {
     try {
         const token = req.header("Authorization").replace("Bearer ", "");
-        const decoded = jsonwebtoken.verify(token, process.env.JSONWEBTOKEN_SECRET || 'asdfghjkl');
+        const decoded = jsonwebtoken.verify(token, JSONWEBTOKENSECREYKEY);
         const user = await User.findOne({ _id: decoded.userId, token: token });
         if (!user) {
             throw new Error();
