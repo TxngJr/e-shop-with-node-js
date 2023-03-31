@@ -1,18 +1,19 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const transactionSchema = new mongoose.Schema({
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+const transactionSchema = new Schema({
+    order: {
+        type: Schema.Types.ObjectId,
+        ref: 'Order',
+    },
+    paymentMethod: {
+        type: String,
         required: true,
     },
-    transaction_date: {
-        type: Date,
-        default: Date.now,
-    },
-    transaction_amount: {
-        type: Number,
-        require: true,
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'completed'],
+        default: 'pending',
     }
 });
 

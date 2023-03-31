@@ -4,29 +4,31 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     email: {
         type: String,
         required: true,
         unique: true,
-        index: true,
     },
     password: {
         type: String,
         required: true,
+    },
+    address: {
+        type: String, 
+    },
+    phone: { 
+        type: String, 
     },
     status: {
         type: String,
         enum: ['admin', 'member', 'ban'],
         default: 'member',
     },
-    balance: {
-        type: Number,
-        default: 0
-    },
     token: {
         type: String,
-        default: null
+        default: null,
     },
     createAt: {
         type: Date,

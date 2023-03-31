@@ -2,13 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { checkToken } = require('../middlewares/tokenMiddleware');
 const { checkStatus } = require('../middlewares/roleMiddleware');
-const { getUser, getUsers, createUser, getToken, deleteToken, banUser } = require('../controllers/userController');
+const { getMyUser, getUser, getUsers, updateMyUser, updateUser, createUser, getToken, deleteToken } = require('../controllers/userController');
 
-router.get('/getuser', checkToken, getUser);
-router.get('/getusers', checkToken, checkStatus(['admin']), getUsers);
-router.post('/createuser', createUser);
-router.post('/gettoken', getToken);
-router.get('/deletetoken', checkToken, deleteToken);
-router.put('/banuser/:userId', checkToken, checkStatus(['admin']), banUser);
+router.get('/', checkToken, getMyUser);
+router.get('/:name', checkToken,checkStatus(['admin']), getUser);
+router.get('/all-users', checkToken, checkStatus(['admin']), getUsers);
+router.put('/edit-user',checkToken, updateMyUser);
+router.put('/edit-user/:name',checkToken,checkStatus(['admin']), updateUser);
+router.post('/register', createUser);
+router.post('/login', getToken);
+router.get('/logout', checkToken, deleteToken);
 
 module.exports = router;
